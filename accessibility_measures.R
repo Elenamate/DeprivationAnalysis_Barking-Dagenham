@@ -40,8 +40,16 @@ model_data <- model_data[,c(1:5,18:21)]
 model_subset <-  model_data[as.character(model_data$zone_origin)!= model_data$zone_dest,]
 
 # Calculate complete distances between LSOAS
-######################################### read neighborgs data
-nbs <- read.csv('Data/nbs.csv')
+#Calculate neighborgs list
+nb <- poly2nb(London_lsoas,row.names = London_lsoas$LSOA11CD, queen= TRUE)
+head(nb)
+mat <- nb2mat(nb, style="B")
+colnames(mat) <- rownames(mat)
+mat
+nbs <- melt(mat)
+
+# read neighborgs data
+#nbs <- read.csv('Data/nbs.csv')
 #arrange codes by origin to match
 times <- arrange(times, zone_origin, zone_dest)
 nbs <- arrange(nbs, Var1, Var2)
